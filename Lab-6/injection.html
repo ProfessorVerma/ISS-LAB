@@ -1,0 +1,72 @@
+/** * SQL Injection Example * * Consider a login system. * Step 1: Normal Login
+username: admin password: 1234 Output: Login Successful Step 2: Wrong Password
+username: admin password: 9999 Output: Login Failed Step 3 Injection Attack
+username: admin' -- password: anything Output: Login Successful (SQL Injection
+Bypass) */
+
+<!doctype html>
+<html>
+  <head>
+    <title>SQL Injection Demo</title>
+
+    <style>
+      body {
+        font-family: Arial;
+        text-align: center;
+        margin-top: 100px;
+      }
+
+      input {
+        padding: 8px;
+        margin: 5px;
+      }
+
+      button {
+        padding: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>SQL Injection Demonstration</h2>
+
+    <p>Correct Login: <b>admin / 1234</b></p>
+
+    <input id="username" placeholder="username" /><br />
+    <input id="password" placeholder="password" /><br />
+
+    <button onclick="login()">Login</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+      function login() {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+
+        let dbUser = "admin";
+        let dbPass = "1234";
+
+        let query =
+          "SELECT * FROM users WHERE username='" +
+          username +
+          "' AND password='" +
+          password +
+          "'";
+
+        console.log("Generated Query:", query);
+
+        /* Injection */
+
+        if (username.includes("' --")) {
+          document.getElementById("result").innerHTML =
+            "Login Successful (SQL Injection Bypass)";
+        } else if (username == dbUser && password == dbPass) {
+          document.getElementById("result").innerHTML = "Login Successful";
+        } else {
+          document.getElementById("result").innerHTML = "Login Failed";
+        }
+      }
+    </script>
+  </body>
+</html>
